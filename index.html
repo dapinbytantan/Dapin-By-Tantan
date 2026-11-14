@@ -15,6 +15,11 @@
             <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl"></div>
             <h1 class="text-3xl font-extrabold tracking-tight relative z-10">Dapin by TanTan</h1>
             <p class="text-purple-200 text-sm mt-1.5 relative z-10 font-medium">Layanan Pengajuan Pinjaman Cepat, Aman & Terpercaya</p>
+            
+            <!-- Status Jam Operasional -->
+            <div id="statusBuka" class="inline-flex items-center gap-2 mt-4 px-3.5 py-1 rounded-full text-xs font-bold tracking-wide shadow-sm">
+                <!-- Status akan diatur otomatis oleh Javascript -->
+            </div>
         </div>
 
         <!-- Form Pengajuan -->
@@ -60,6 +65,15 @@
                 <div class="flex justify-between text-xs text-slate-500 pt-2 border-t border-dashed border-violet-200/60">
                     <span class="font-medium">Estimasi Jatuh Tempo:</span>
                     <span id="displayJatuhTempo" class="font-bold text-slate-700">-</span>
+                </div>
+            </div>
+
+            <!-- Warning Notice (Peringatan Denda) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3.5 flex items-start gap-2.5 text-xs text-amber-800 leading-relaxed">
+                <span class="text-base">⚠️</span>
+                <div>
+                    <span class="font-bold block mb-0.5">Perhatian Penting:</span>
+                    Keterlambatan pelunasan melewati tanggal jatuh tempo akan dikenakan denda harian sesuai ketentuan yang berlaku. Harap pinjam bijak.
                 </div>
             </div>
 
@@ -169,6 +183,14 @@
                 </div>
             </div>
 
+            <!-- Syarat & Ketentuan (Checkbox Persetujuan) -->
+            <div class="bg-violet-50/50 border border-violet-100 rounded-xl p-3.5 flex items-start gap-3 mt-4">
+                <input type="checkbox" id="termsCheck" required class="mt-1 w-4 h-4 text-violet-600 rounded border-slate-300 focus:ring-violet-500 cursor-pointer">
+                <label for="termsCheck" class="text-xs text-slate-600 leading-relaxed cursor-pointer select-none">
+                    Saya menyatakan data yang diisi benar, menyetujui rincian bunga & biaya admin, serta bersedia melunasi pinjaman tepat waktu sesuai tanggal jatuh tempo.
+                </label>
+            </div>
+
             <!-- Tombol Submit -->
             <button type="submit" 
                 class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition duration-200 transform active:scale-[0.98] mt-2">
@@ -177,8 +199,24 @@
         </form>
     </div>
 
-    <!-- Script Kalkulator & WhatsApp Sender -->
+    <!-- Script Kalkulator, Jam Operasional & WhatsApp Sender -->
     <script>
+        // Cek Jam Operasional (Buka 10.00 - 22.00)
+        function cekJamOperasional() {
+            const now = new Date();
+            const jam = now.getHours();
+            const statusEl = document.getElementById('statusBuka');
+
+            if (jam >= 10 && jam < 22) {
+                statusEl.className = "inline-flex items-center gap-2 mt-4 px-3.5 py-1 rounded-full text-xs font-bold tracking-wide shadow-sm bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Admin Online (Buka s/d 22:00)';
+            } else {
+                statusEl.className = "inline-flex items-center gap-2 mt-4 px-3.5 py-1 rounded-full text-xs font-bold tracking-wide shadow-sm bg-rose-500/20 text-rose-300 border border-rose-500/30";
+                statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-400"></span> Admin Offline (Diproses Besok Pkl 10:00)';
+            }
+        }
+        cekJamOperasional();
+
         const BIAYA_ADMIN = 12000;
 
         function formatRupiahInput(input) {
@@ -252,6 +290,13 @@
         document.getElementById('loanForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            // Cek apakah checkbox syarat & ketentuan dicentang
+            const termsChecked = document.getElementById('termsCheck').checked;
+            if (!termsChecked) {
+                alert('Silakan centang kotak persetujuan syarat & ketentuan terlebih dahulu.');
+                return;
+            }
+
             const nominal = getNominalAngka();
             const tenorVal = selectTenor.value;
             const nama = document.getElementById('nama').value;
@@ -309,7 +354,9 @@
 *3. KONTAK DARURAT*
 - Nama: ${namaDarurat}
 - Hubungan: ${hubungan}
-- No HP: ${hpDarurat}`;
+- No HP: ${hpDarurat}
+
+_Status Persetujuan: Setuju dengan Syarat & Ketentuan Dapin by TanTan_`;
 
             const urlWA = `https://wa.me/${nomorAdmin}?text=${encodeURIComponent(pesan)}`;
             window.open(urlWA, '_blank');
