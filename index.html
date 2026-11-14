@@ -20,7 +20,7 @@
     <!-- Overlay Latar Belakang saat Menu Terbuka -->
     <div id="menuOverlay" onclick="toggleMenu()" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 hidden transition-opacity"></div>
 
-    <!-- Side Menu (Hanya Berisi Tombol Testimoni) -->
+    <!-- Side Menu -->
     <div id="sideMenu" class="fixed top-0 left-0 h-full w-72 bg-slate-900 text-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl border-r border-violet-900/50 flex flex-col justify-between p-6">
         <div>
             <!-- Header Side Menu -->
@@ -32,7 +32,7 @@
                 <button onclick="toggleMenu()" class="text-slate-400 hover:text-white text-xl font-bold p-1">&times;</button>
             </div>
 
-            <!-- Daftar Menu (Hanya Testimoni) -->
+            <!-- Daftar Menu -->
             <nav class="space-y-3">
                 <a href="https://wa.me/628131114511?text=Halo%20Admin,%20saya%20ingin%20memberikan%20testimoni" target="_blank" onclick="toggleMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-violet-600 hover:text-white transition font-medium text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
@@ -62,16 +62,26 @@
 
         <!-- Form Pengajuan -->
         <form id="loanForm" class="p-7 space-y-5">
-            <!-- Nominal Pinjaman -->
+            <!-- Nominal Pinjaman & Quick Buttons -->
             <div>
                 <label class="block text-sm font-bold text-slate-700 mb-1.5">Nominal Pinjaman (Rp)</label>
+                
+                <!-- Quick Nominal Buttons -->
+                <div class="grid grid-cols-5 gap-1.5 mb-2.5">
+                    <button type="button" onclick="setPilihNominal(200000)" class="bg-violet-50 hover:bg-violet-600 hover:text-white text-violet-700 border border-violet-200 text-xs font-bold py-1.5 px-1 rounded-lg transition">200rb</button>
+                    <button type="button" onclick="setPilihNominal(500000)" class="bg-violet-50 hover:bg-violet-600 hover:text-white text-violet-700 border border-violet-200 text-xs font-bold py-1.5 px-1 rounded-lg transition">500rb</button>
+                    <button type="button" onclick="setPilihNominal(1000000)" class="bg-violet-50 hover:bg-violet-600 hover:text-white text-violet-700 border border-violet-200 text-xs font-bold py-1.5 px-1 rounded-lg transition">1 Juta</button>
+                    <button type="button" onclick="setPilihNominal(1500000)" class="bg-violet-50 hover:bg-violet-600 hover:text-white text-violet-700 border border-violet-200 text-xs font-bold py-1.5 px-1 rounded-lg transition">1,5 Juta</button>
+                    <button type="button" onclick="setPilihNominal(2000000)" class="bg-violet-50 hover:bg-violet-600 hover:text-white text-violet-700 border border-violet-200 text-xs font-bold py-1.5 px-1 rounded-lg transition">2 Juta</button>
+                </div>
+
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 font-bold">Rp</span>
                     <input type="text" id="nominal" required 
                         class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-violet-600 focus:border-violet-600 outline-none transition text-slate-800 font-semibold bg-slate-50/50"
                         placeholder="Contoh: 500.000" oninput="formatRupiahInput(this)">
                 </div>
-                <p class="text-xs text-slate-400 mt-1">Masukkan angka saja, format Rupiah otomatis.</p>
+                <p class="text-xs text-slate-400 mt-1">Pilih tombol cepat di atas atau ketik nominal manual.</p>
             </div>
 
             <!-- Tenor Pinjaman -->
@@ -239,6 +249,13 @@
 
     <!-- Script Logic -->
     <script>
+        // Fungsi Tombol Pintasan Nominal (Quick Buttons)
+        function setPilihNominal(nominalAngka) {
+            const inputNominal = document.getElementById('nominal');
+            inputNominal.value = new Intl.NumberFormat('id-ID').format(nominalAngka);
+            hitungSimulasi();
+        }
+
         // Fungsi Buka/Tutup Side Menu
         function toggleMenu() {
             const menu = document.getElementById('sideMenu');
