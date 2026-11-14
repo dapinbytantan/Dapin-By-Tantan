@@ -3,105 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dapin by TanTan - Formulir Pengajuan Pinjaman</title>
+    <title>Dapin by TanTan - Pengajuan Pinjaman</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-100 min-h-screen flex flex-col items-center py-6 px-4">
-
-    <div class="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden mb-6">
-        <!-- Header Ungu -->
-        <div class="bg-purple-700 text-white text-center py-8 px-6 relative overflow-hidden">
+<body class="bg-slate-50 min-h-screen py-8 px-4">
+    <div class="max-w-md mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-violet-600 to-indigo-600 p-6 text-white text-center">
             <h1 class="text-2xl font-bold tracking-wide">Dapin by TanTan</h1>
-            <p class="text-purple-200 text-sm mt-1">Formulir Pengajuan Pinjaman Tunai Cepat & Mudah</p>
+            <p class="text-violet-200 text-sm mt-1">Layanan Pengajuan Pinjaman Cepat & Aman</p>
         </div>
 
-        <!-- Form Input -->
+        <!-- Form Pengajuan -->
         <form id="loanForm" class="p-6 space-y-5">
+            <!-- Nominal Pinjaman -->
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Nominal Pinjaman (Rp)</label>
+                <input type="text" id="nominal" required 
+                    class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition text-slate-800 font-medium"
+                    placeholder="Contoh: 500.000" oninput="formatRupiahInput(this)">
+                <p class="text-xs text-slate-500 mt-1">Masukkan angka saja, format Rupiah otomatis.</p>
+            </div>
+
+            <!-- Tenor Pinjaman -->
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Pilih Tenor (Durasi)</label>
+                <select id="tenor" required
+                    class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition text-slate-800 bg-white">
+                    <option value="" disabled selected>-- Pilih Tenor Pinjaman --</option>
+                    <option value="7">7 Hari (Bunga 35%)</option>
+                    <option value="10">10 Hari (Bunga 45%)</option>
+                </select>
+            </div>
+
+            <!-- Simulasi Otomatis -->
+            <div class="bg-violet-50 rounded-xl p-4 border border-violet-100 space-y-2">
+                <div class="flex justify-between text-sm text-slate-600">
+                    <span>Estimasi Bunga:</span>
+                    <span id="displayBunga" class="font-semibold text-violet-700">Rp 0</span>
+                </div>
+                <div class="flex justify-between text-sm text-slate-800 font-bold border-t border-violet-200 pt-2">
+                    <span>Total Harus Dibayar:</span>
+                    <span id="displayTotal" class="text-violet-700">Rp 0</span>
+                </div>
+            </div>
+
+            <hr class="border-slate-200 my-2">
+
+            <!-- Data Diri Peminjam -->
+            <h2 class="text-sm font-bold text-slate-800 uppercase tracking-wider">1. Data Diri Peminjam</h2>
             
-            <!-- Bagian 1: Detail Pinjaman -->
             <div>
-                <h2 class="text-purple-900 font-bold text-base mb-3 pb-1 border-b border-purple-100">Detail Pinjaman</h2>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nominal Pinjaman (Rp) *</label>
-                        <input type="number" id="jumlahPinjaman" placeholder="Contoh: 1000000" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Pilihan Tenor Cicilan *</label>
-                        <select id="tenor" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm bg-white">
-                            <option value="">-- Pilih Tenor Cicilan --</option>
-                            <option value="7_hari">7 Hari (Bunga 35%)</option>
-                            <option value="10_hari">10 Hari (Bunga 40%)</option>
-                        </select>
-                    </div>
-                </div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap (Sesuai KTP)</label>
+                <input type="text" id="nama" required 
+                    class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-violet-500 outline-none transition"
+                    placeholder="Nama lengkap Anda">
             </div>
 
-            <!-- Bagian 2: Data Diri -->
             <div>
-                <h2 class="text-purple-900 font-bold text-base mb-3 pb-1 border-b border-purple-100">1. Data Diri Peminjam</h2>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap (Sesuai KTP) *</label>
-                        <input type="text" id="nama" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nomor WhatsApp Aktif *</label>
-                        <input type="tel" id="whatsapp" placeholder="08xxxxxxxxxx" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nomor Induk Kependudukan (NIK/KTP) *</label>
-                        <input type="text" id="nik" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Pekerjaan / Sumber Penghasilan *</label>
-                        <input type="text" id="pekerjaan" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Alamat Lengkap (Sesuai KTP) *</label>
-                        <textarea id="alamat" rows="3" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm"></textarea>
-                    </div>
-                </div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">No. WhatsApp Aktif</label>
+                <input type="tel" id="whatsapp" required inputmode="numeric" pattern="[0-9]*"
+                    class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-violet-500 outline-none transition"
+                    placeholder="Contoh: 08123456789">
             </div>
 
-            <!-- Bagian 3: Kontak Darurat -->
             <div>
-                <h2 class="text-purple-900 font-bold text-base mb-3 pb-1 border-b border-purple-100">2. Kontak Darurat</h2>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Kontak Darurat *</label>
-                        <input type="text" id="namaDarurat" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Hubungan dengan Peminjam *</label>
-                        <input type="text" id="hubungan" placeholder="Contoh: Keluarga/Tetangga" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nomor HP Kontak Darurat *</label>
-                        <input type="tel" id="hpDarurat" placeholder="08xxxxxxxxxx" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm">
-                    </div>
-                </div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Nomor KTP (NIK)</label>
+                <input type="text" id="nik" required inputmode="numeric" pattern="[0-9]*"
+                    class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-violet-500 outline-none transition"
+                    placeholder="16 digit nomor KTP">
             </div>
 
-            <!-- Tombol Kirim -->
-            <button type="submit" class="w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 rounded-xl transition duration-200 shadow-md text-sm mt-4">
-                Kirim Pengajuan
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Pekerjaan</label>
+                <input type="text" id="pekerjaan" required 
+                    class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-violet-500 outline-none transition"
+                    placeholder="Contoh: Karyawan Swasta / Wirausaha">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Alamat Domisili Sekarang</label>
+                <textarea id="alamat" rows="2" required 
+                    class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-violet-500 outline-none transition"
+                    placeholder="Nama jalan, RT/RW, Kecamatan, Kota"></textarea>
+            </div>
+
+            <hr class="border-slate-200 my-2">
+
+            <!-- Kontak Darurat -->
+            <h2 class="text-sm font-bold text-slate-800 uppercase tracking-wider">2. Kontak Darurat (Keluarga/Kerabat)</h2>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Nama Kontak Darurat</label>
+                <input type="text" id="namaDarurat" required 
+                    class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-violet-500 outline-none transition"
+                    placeholder="Nama kerabat/keluarga">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Hubungan</label>
+                <input type="text" id="hubungan" required 
+                    class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-violet-500 outline-none transition"
+                    placeholder="Contoh: Orang Tua / Saudara / Suami/Istri">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">No. HP Kontak Darurat</label>
+                <input type="tel" id="hpDarurat" required inputmode="numeric" pattern="[0-9]*"
+                    class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-violet-500 outline-none transition"
+                    placeholder="Contoh: 08987654321">
+            </div>
+
+            <!-- Tombol Submit -->
+            <button type="submit" 
+                class="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:shadow-violet-200 transition duration-200">
+                Kirim Pengajuan via WhatsApp
             </button>
         </form>
     </div>
 
-    <!-- Script Kalkulasi Otomatis dan Pengiriman ke WhatsApp -->
+    <!-- Script Kalkulator & WhatsApp Sender -->
     <script>
+        // Fungsi memformat input nominal menjadi Rupiah dan menyaring hanya angka
+        function formatRupiahInput(input) {
+            let angkaUnformatted = input.value.replace(/[^,\d]/g, '');
+            let split = angkaUnformatted.split(',');
+            let sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            input.value = rupiah;
+            hitungSimulasi();
+        }
+
+        function getNominalAngka() {
+            let val = document.getElementById('nominal').value.replace(/\./g, '');
+            return parseInt(val) || 0;
+        }
+
+        const inputNominal = document.getElementById('nominal');
+        const selectTenor = document.getElementById('tenor');
+        const displayBunga = document.getElementById('displayBunga');
+        const displayTotal = document.getElementById('displayTotal');
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+        }
+
+        function hitungSimulasi() {
+            const nominal = getNominalAngka();
+            const tenor = selectTenor.value;
+
+            if (!nominal || !tenor) {
+                displayBunga.innerText = "Rp 0";
+                displayTotal.innerText = "Rp 0";
+                return;
+            }
+
+            let persentase = 0;
+            if (tenor === "7") {
+                persentase = 0.35; // Bunga 35%
+            } else if (tenor === "10") {
+                persentase = 0.45; // Bunga 45%
+            }
+
+            const nominalBunga = nominal * persentase;
+            const totalBayar = nominal + nominalBunga;
+
+            displayBunga.innerText = formatRupiah(nominalBunga);
+            displayTotal.innerText = formatRupiah(totalBayar);
+        }
+
+        inputNominal.addEventListener('input', hitungSimulasi);
+        selectTenor.addEventListener('change', hitungSimulasi);
+
+        // Proses Kirim ke WhatsApp
         document.getElementById('loanForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Ambil data dari form
-            const nominal = parseFloat(document.getElementById('jumlahPinjaman').value);
-            const opsiTenor = document.getElementById('tenor').value;
+
+            const nominal = getNominalAngka();
+            const tenorVal = selectTenor.value;
             const nama = document.getElementById('nama').value;
             const whatsapp = document.getElementById('whatsapp').value;
             const nik = document.getElementById('nik').value;
@@ -111,49 +198,37 @@
             const hubungan = document.getElementById('hubungan').value;
             const hpDarurat = document.getElementById('hpDarurat').value;
 
-            // Hitung bunga berdasarkan opsi tenor
-            let persenBunga = 0;
-            let labelTenor = "";
+            let labelTenor = tenorVal === "7" ? "7 Hari (Bunga 35%)" : "10 Hari (Bunga 45%)";
+            let persentase = tenorVal === "7" ? 0.35 : 0.45;
             
-            if (opsiTenor === "7_hari") {
-                persenBunga = 0.35; // 35%
-                labelTenor = "7 Hari (Bunga 35%)";
-            } else if (opsiTenor === "10_hari") {
-                persenBunga = 0.40; // 40%
-                labelTenor = "10 Hari (Bunga 40%)";
-            }
-
-            const nominalBunga = nominal * persenBunga;
+            const nominalBunga = nominal * persentase;
             const totalBayar = nominal + nominalBunga;
 
-            // Format angka Rupiah
-            const formatRupiah = (angka) => {
-                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
-            };
-
-            // GANTI NOMOR DI BAWAH INI DENGAN NOMOR WHATSAPP KAMU (Awali dengan 62)
+            // GANTI NOMOR DI BAWAH INI DENGAN NOMOR WHATSAPP ANDA (Awali dengan 62 tanpa angka 0 di depan)
             const nomorAdmin = "628131114511"; 
 
-            // Format Pesan WhatsApp
-            const pesan = `Halo Admin Dapin by TanTan, saya ingin mengajukan pinjaman dengan detail berikut:%0A%0A` +
-                          `*RINCIAN PINJAMAN*%0A` +
-                          `- Nominal Pinjaman: ${formatRupiah(nominal)}%0A` +
-                          `- Tenor: ${labelTenor}%0A` +
-                          `- Estimasi Bunga: ${formatRupiah(nominalBunga)}%0A` +
-                          `- *TOTAL HARUS DIBAYAR: ${formatRupiah(totalBayar)}*%0A%0A` +
-                          `*1. DATA DIRI PEMINJAM*%0A` +
-                          `- Nama: ${nama}%0A` +
-                          `- No WhatsApp: ${whatsapp}%0A` +
-                          `- NIK: ${nik}%0A` +
-                          `- Pekerjaan: ${pekerjaan}%0A` +
-                          `- Alamat: ${alamat}%0A%0A` +
-                          `*2. KONTAK DARURAT*%0A` +
-                          `- Nama: ${namaDarurat}%0A` +
-                          `- Hubungan: ${hubungan}%0A` +
-                          `- No HP: ${hpDarurat}`;
+            const pesan = `*HALO ADMIN DAPIN BY TANTAN, SAYA INGIN MENGAJUKAN PINJAMAN*
 
-            // Buka WhatsApp
-            window.open(`https://wa.me/${nomorAdmin}?text=${pesan}`, '_blank');
+*📊 RINCIAN PINJAMAN*
+- Nominal Pinjaman: ${formatRupiah(nominal)}
+- Tenor: ${labelTenor}
+- Estimasi Bunga: ${formatRupiah(nominalBunga)}
+- *TOTAL HARUS DIBAYAR: ${formatRupiah(totalBayar)}*
+
+*1. DATA DIRI PEMINJAM*
+- Nama: ${nama}
+- No WhatsApp: ${whatsapp}
+- NIK: ${nik}
+- Pekerjaan: ${pekerjaan}
+- Alamat: ${alamat}
+
+*2. KONTAK DARURAT*
+- Nama: ${namaDarurat}
+- Hubungan: ${hubungan}
+- No HP: ${hpDarurat}`;
+
+            const urlWA = `https://wa.me/${nomorAdmin}?text=${encodeURIComponent(pesan)}`;
+            window.open(urlWA, '_blank');
         });
     </script>
 </body>
